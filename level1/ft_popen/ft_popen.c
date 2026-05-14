@@ -35,13 +35,19 @@ int ft_popen(const char *file, char *const argv[], char type)
         // if the type is to read, then we will try to set the write end or else we will set the read end
         if (type == 'r')
         {
-            if (dup2(fd[1], STDOUT_FILENO) == -1)
+            if (dup2(fd[1], STDOUT_FILENO) == -1){
+                close(fd[0]);
+                close(fd[1]);
                 exit(1);
+            }
         }
         else
         {
-            if (dup2(fd[0], STDIN_FILENO) == -1)
+            if (dup2(fd[0], STDIN_FILENO) == -1){
+                close(fd[0]);
+                close(fd[1]);
                 exit(1);
+            }
         }
         // finally, close both of the fds
         close(fd[0]);
